@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173"],
+    origin: ["https://hangout-nu.vercel.app"],
     credentials: true,
   })
 );
@@ -63,6 +63,6 @@ app.use(auth);
 const usersRouter = require("./routes/user_router");
 app.use("/users", usersRouter);
 
-app.listen(3000, () => {
+app.listen(80, () => {
   console.log("Server is Starting");
 });
