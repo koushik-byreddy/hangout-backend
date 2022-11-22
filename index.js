@@ -1,21 +1,20 @@
 //cors
 const cors = require("cors");
-
+var path = require("path");
 // Importing express module
 const express = require("express");
 
 // Importing express-session module
 const session = require("express-session");
-const cookieParser = require("cookie-parser");
 
 // Importing file-store module
 const filestore = require("session-file-store")(session);
-const path = require("path");
+
 const mongoose = require("mongoose");
 
 var app = express();
 app.use(express.json());
-
+app.use(express.static(path.join(__dirname, "dist")));
 app.use(
   cors({
     origin: ["https://hangout-nu.vercel.app"],
