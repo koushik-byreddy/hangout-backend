@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
 app.use(
   cors({
-    origin: ["https://hangout-nu.vercel.app"],
+    origin: ["http://localhost:5173"],
     credentials: true,
   })
 );
