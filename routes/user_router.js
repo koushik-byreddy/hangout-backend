@@ -1,5 +1,6 @@
 const router = require("express").Router();
 let User = require("../models/user_model");
+const sendSms = require("../aws-sns/aws.js");
 
 router.route("/add").post((req, res) => {
   console.log(req.body);
@@ -42,6 +43,7 @@ router.route("/otp_gen").post((req, res) => {
     .then((user) => {
       req.session.otp = Math.floor(Math.random() * 9000 + 1000);
       //send otp with magic😎
+      sendSms(req.session.otp, user.number);
     })
     .catch((err) => res.status(40).json("Error: " + err));
 });
