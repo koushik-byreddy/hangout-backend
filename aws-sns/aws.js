@@ -3,7 +3,7 @@ require("dotenv").config();
 // Set region
 AWS.config.update({ region: "ap-south-1" });
 
-sendSms = (otp, num) => {
+sendSms = (otp, num, res) => {
   var params = {
     Message: "Your hangout verification code is " + otp /* required */,
     PhoneNumber: "+91" + num,
@@ -21,6 +21,7 @@ sendSms = (otp, num) => {
     .then(function (data) {
       console.log(data);
       console.log("MessageID is " + data.MessageId);
+      res.json("otp sent");
     })
     .catch(function (err) {
       console.error(err, err.stack);

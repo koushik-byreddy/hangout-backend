@@ -13,6 +13,7 @@ const filestore = require("session-file-store")(session);
 const mongoose = require("mongoose");
 
 var app = express();
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "dist")));
 app.use(
@@ -28,8 +29,9 @@ app.use(
     name: "session-id",
     secret: "GFGEnter", // Secret key,
     cookie: {
-      maxAge: 86400 * 60 * 1000,
-      sameSite: "none",
+      maxAge: 24 * 60 * 60 * 1000,
+      sameSite: false,
+      secure: false,
     },
     saveUninitialized: false,
     resave: false,
@@ -53,6 +55,7 @@ function auth(req, res, next) {
     next();
   } else {
     console.log("auth");
+    console.log(req.session);
     next();
   }
 }

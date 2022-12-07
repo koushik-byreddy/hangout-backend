@@ -2,6 +2,12 @@ const router = require("express").Router();
 let User = require("../models/user_model");
 const sendSms = require("../aws-sns/aws.js");
 
+router.route("/u").post((req, res) => {
+  User.find().then((user) => {
+    res.send(user);
+  });
+});
+
 router.route("/add").post((req, res) => {
   console.log(req.body);
   const username = req.body.username;
@@ -43,23 +49,25 @@ router.route("/otp_gen").post((req, res) => {
     .then((user) => {
       req.session.otp = Math.floor(Math.random() * 9000 + 1000);
       //send otp with magic😎
-      sendSms(req.session.otp, user.number);
+      sendSms(req.session.otp, user.number, res);
+      console.log(req.session);
     })
     .catch((err) => res.status(40).json("Error: " + err));
 });
 router.route("/verify").post((req, res) => {
-  User.findOne({ username: req.body.username })
-    .then((user) => {
-      if (req.body.otp == req.session.otp) {
-        user.verified = true;
-
-        user
-          .save()
-          .then(() => res.json("user verified"))
-          .catch((err) => res.status(400).json("Error: " + err));
+  User.findOneAndUpdate(
+    { username: req.body.username },
+    { verified: 1 },
+    null,
+    function (err, docs) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log("Original Doc : " + docs);
+        res.json("user verified");
       }
-    })
-    .catch((err) => res.status(40).json("Error: " + err));
+    }
+  );
 });
 
 module.exports = router;
